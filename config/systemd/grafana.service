@@ -1,0 +1,19 @@
+# /etc/systemd/system/grafana.service
+[Unit]
+Description=Personal PVE task manager dashboard
+After=network-online.target prometheus.service
+[Service]
+User=grafana
+WorkingDirectory=/opt/grafana
+ExecStart=/opt/grafana/bin/grafana server --homepath=/opt/grafana --config=/etc/grafana/grafana.ini
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+ProtectHome=yes
+ProtectSystem=full
+[Install]
+WantedBy=multi-user.target
+
+# /etc/systemd/system/grafana.service.d/memory.conf
+[Service]
+Environment=GOMEMLIMIT=512MiB

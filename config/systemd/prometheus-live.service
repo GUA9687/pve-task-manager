@@ -1,0 +1,20 @@
+# /etc/systemd/system/prometheus-live.service
+[Unit]
+Description=RAM-only adaptive live metrics
+After=network-online.target
+[Service]
+User=prometheus
+RuntimeDirectory=prometheus-live
+RuntimeDirectoryMode=0750
+ExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus/live.yml --storage.tsdb.path=/run/prometheus-live --storage.tsdb.retention.time=1h --storage.tsdb.retention.size=160MB --storage.tsdb.wal-segment-size=10MB --web.listen-address=127.0.0.1:9093
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+ProtectHome=yes
+ProtectSystem=full
+[Install]
+WantedBy=multi-user.target
+
+# /etc/systemd/system/prometheus-live.service.d/memory.conf
+[Service]
+Environment=GOMEMLIMIT=256MiB

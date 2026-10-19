@@ -1,0 +1,14 @@
+# /etc/systemd/system/adaptive-monitor.service
+[Unit]
+Description=Adaptive Grafana sampling and query router
+After=network-online.target prometheus-live.service
+[Service]
+ExecStart=/usr/bin/python3 /usr/local/lib/adaptive_monitor.py
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=yes
+ProtectHome=yes
+ProtectSystem=full
+ReadWritePaths=/etc/prometheus
+[Install]
+WantedBy=multi-user.target

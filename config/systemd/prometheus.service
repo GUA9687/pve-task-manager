@@ -1,0 +1,18 @@
+# /etc/systemd/system/prometheus.service
+[Unit]
+Description=Personal monitoring time series database
+After=network-online.target
+[Service]
+User=prometheus
+ExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus --storage.tsdb.retention.time=1d --storage.tsdb.retention.size=50MB --storage.tsdb.wal-segment-size=10MB --web.listen-address=127.0.0.1:9090
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+ProtectHome=yes
+ProtectSystem=full
+[Install]
+WantedBy=multi-user.target
+
+# /etc/systemd/system/prometheus.service.d/memory.conf
+[Service]
+Environment=GOMEMLIMIT=256MiB
