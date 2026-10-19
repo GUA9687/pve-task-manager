@@ -1,0 +1,959 @@
+{
+  "uid": "pve-disk",
+  "title": "磁盘 · 吞吐与健康",
+  "schemaVersion": 40,
+  "version": 1,
+  "editable": true,
+  "style": "dark",
+  "timezone": "Asia/Shanghai",
+  "refresh": "1s",
+  "timepicker": {
+    "refresh_intervals": [
+      "1s",
+      "5s",
+      "10s",
+      "30s",
+      "1m"
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "tags": [
+    "PVE",
+    "任务管理器"
+  ],
+  "graphTooltip": 1,
+  "panels": [
+    {
+      "title": "读取",
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:disk_read_bytes_per_second{machine=\"$machine\"}",
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#73BF69"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 1
+    },
+    {
+      "title": "写入",
+      "type": "stat",
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:disk_write_bytes_per_second{machine=\"$machine\"}",
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#73BF69"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 2
+    },
+    {
+      "title": "每盘读取",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 2,
+        "w": 6,
+        "h": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "irate(node_disk_read_bytes_total{machine=\"$machine\",device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[5m])",
+          "legendFormat": "{{device}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "irate(windows_physical_disk_read_bytes_total{machine=\"$machine\"}[5m])",
+          "legendFormat": "{{disk}}",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#73BF69"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 3,
+      "maxDataPoints": 240
+    },
+    {
+      "title": "每盘写入",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 6,
+        "y": 2,
+        "w": 6,
+        "h": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "irate(node_disk_written_bytes_total{machine=\"$machine\",device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[5m])",
+          "legendFormat": "{{device}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "irate(windows_physical_disk_write_bytes_total{machine=\"$machine\"}[5m])",
+          "legendFormat": "{{disk}}",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#73BF69"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 4,
+      "maxDataPoints": 240
+    },
+    {
+      "title": "读写 IOPS",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 12,
+        "y": 2,
+        "w": 6,
+        "h": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "irate(node_disk_reads_completed_total{machine=\"$machine\",device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[5m])",
+          "legendFormat": "{{device}} 读",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "irate(node_disk_writes_completed_total{machine=\"$machine\",device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[5m])",
+          "legendFormat": "{{device}} 写",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "irate(windows_physical_disk_reads_total{machine=\"$machine\"}[5m])",
+          "legendFormat": "{{disk}} 读",
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "irate(windows_physical_disk_writes_total{machine=\"$machine\"}[5m])",
+          "legendFormat": "{{disk}} 写",
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "iops",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#73BF69"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 5,
+      "maxDataPoints": 240
+    },
+    {
+      "title": "平均读取延迟",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 18,
+        "y": 2,
+        "w": 6,
+        "h": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "irate(node_disk_read_time_seconds_total{machine=\"$machine\",device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[5m]) / clamp_min(irate(node_disk_reads_completed_total{machine=\"$machine\",device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[5m]),0.001)",
+          "legendFormat": "{{device}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "irate(windows_physical_disk_read_latency_seconds_total{machine=\"$machine\"}[5m]) / clamp_min(irate(windows_physical_disk_reads_total{machine=\"$machine\"}[5m]),0.001)",
+          "legendFormat": "{{disk}}",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#73BF69"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 6,
+      "maxDataPoints": 240
+    },
+    {
+      "title": "文件系统使用率",
+      "type": "bargauge",
+      "gridPos": {
+        "x": 0,
+        "y": 7,
+        "w": 8,
+        "h": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "100 * (1 - node_filesystem_avail_bytes{machine=\"$machine\",fstype!~\"tmpfs|devtmpfs|squashfs|overlay\"}/node_filesystem_size_bytes{machine=\"$machine\",fstype!~\"tmpfs|devtmpfs|squashfs|overlay\"})",
+          "legendFormat": "{{mountpoint}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "100 * (1 - windows_logical_disk_free_bytes{machine=\"$machine\",volume=~\"[A-Z]:\"}/windows_logical_disk_size_bytes{machine=\"$machine\",volume=~\"[A-Z]:\"})",
+          "legendFormat": "{{volume}}",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#73BF69"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "min": 0,
+          "max": 100
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "showUnfilled": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 10,
+          "valueSize": 11
+        },
+        "minVizHeight": 12
+      },
+      "id": 7
+    },
+    {
+      "title": "各磁盘温度",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 8,
+        "y": 7,
+        "w": 8,
+        "h": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_disk_temperature_celsius{machine=\"$machine\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"smart\"} < 900)",
+          "legendFormat": "{{disk}} · {{model}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#FFB357"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 8,
+      "maxDataPoints": 240
+    },
+    {
+      "title": "SMART 健康",
+      "type": "stat",
+      "gridPos": {
+        "x": 16,
+        "y": 7,
+        "w": 8,
+        "h": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_disk_smart_passed{machine=\"$machine\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"smart\"} < 900)",
+          "legendFormat": "{{disk}} · {{model}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#5794F2"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "1": {
+                  "text": "通过",
+                  "color": "green"
+                },
+                "0": {
+                  "text": "异常",
+                  "color": "red"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 9
+    },
+    {
+      "title": "通电时长",
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 8,
+        "h": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_disk_power_on_hours{machine=\"$machine\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"smart\"} < 900)",
+          "legendFormat": "{{disk}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "h",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#5794F2"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 10
+    },
+    {
+      "title": "关键 SMART 计数",
+      "type": "table",
+      "gridPos": {
+        "x": 8,
+        "y": 12,
+        "w": 16,
+        "h": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_disk_smart_attribute_raw{machine=\"$machine\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"smart\"} < 900)",
+          "legendFormat": "{{disk}} {{attribute}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#5794F2"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "id": 11
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "machine",
+        "label": "机器",
+        "type": "custom",
+        "query": "PVE 宿主机 : pve,Ubuntu : ubuntu,Windows : windows,飞牛 : fnos",
+        "current": {
+          "text": "PVE 宿主机",
+          "value": "pve"
+        },
+        "options": [
+          {
+            "text": "PVE 宿主机",
+            "value": "pve",
+            "selected": true
+          },
+          {
+            "text": "Ubuntu",
+            "value": "ubuntu",
+            "selected": false
+          },
+          {
+            "text": "Windows",
+            "value": "windows",
+            "selected": false
+          },
+          {
+            "text": "飞牛",
+            "value": "fnos",
+            "selected": false
+          }
+        ],
+        "hide": 0
+      }
+    ]
+  },
+  "links": [
+    {
+      "title": "总览",
+      "type": "link",
+      "url": "/d/pve-home",
+      "icon": "dashboard"
+    },
+    {
+      "title": "CPU",
+      "type": "link",
+      "url": "/d/pve-cpu?var-machine=${machine}"
+    },
+    {
+      "title": "内存",
+      "type": "link",
+      "url": "/d/pve-memory?var-machine=${machine}"
+    },
+    {
+      "title": "磁盘",
+      "type": "link",
+      "url": "/d/pve-disk?var-machine=${machine}"
+    },
+    {
+      "title": "网络",
+      "type": "link",
+      "url": "/d/pve-network?var-machine=${machine}"
+    },
+    {
+      "title": "GPU",
+      "type": "link",
+      "url": "/d/pve-gpu"
+    },
+    {
+      "title": "传感器",
+      "type": "link",
+      "url": "/d/pve-sensors"
+    }
+  ],
+  "description": "Linux 总吞吐仅汇总整盘 sd / nvme 设备，避免将分区、LVM、RAID 重复累加。飞牛的直通机械盘和 NVMe 从飞牛内部采集。SMART 每 5 分钟读取，不主动唤醒休眠机械盘。"
+}

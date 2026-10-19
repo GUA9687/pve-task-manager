@@ -1,0 +1,502 @@
+{
+  "uid": "pve-sensors",
+  "title": "传感器 · 温度与风扇",
+  "schemaVersion": 40,
+  "version": 1,
+  "editable": true,
+  "style": "dark",
+  "timezone": "Asia/Shanghai",
+  "refresh": "1s",
+  "timepicker": {
+    "refresh_intervals": [
+      "1s",
+      "5s",
+      "10s",
+      "30s",
+      "1m"
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "tags": [
+    "PVE",
+    "任务管理器"
+  ],
+  "graphTooltip": 1,
+  "panels": [
+    {
+      "title": "CPU / CCD 温度",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "node_hwmon_temp_celsius{machine=\"pve\"} * on(machine,chip,instance,job) group_left(chip_name) node_hwmon_chip_names{machine=\"pve\",chip_name=\"k10temp\"}",
+          "legendFormat": "{{chip}} {{sensor}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#FFB357"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 1,
+      "maxDataPoints": 240
+    },
+    {
+      "title": "主板与 DIMM 温度",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_bmc_temperature_celsius and on(machine) (time() - lab_collector_last_success_seconds{collector=\"bmc\"} < 180)",
+          "legendFormat": "{{sensor}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#FFB357"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 2,
+      "maxDataPoints": 240
+    },
+    {
+      "title": "CPU / 机箱风扇",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 6,
+        "w": 12,
+        "h": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_bmc_fan_rpm and on(machine) (time() - lab_collector_last_success_seconds{collector=\"bmc\"} < 180)",
+          "legendFormat": "{{sensor}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "rpm",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#56D4C0"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 3,
+      "maxDataPoints": 240
+    },
+    {
+      "title": "主板电压",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 12,
+        "y": 6,
+        "w": 12,
+        "h": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_bmc_voltage_volts and on(machine) (time() - lab_collector_last_success_seconds{collector=\"bmc\"} < 180)",
+          "legendFormat": "{{sensor}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "volt",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#5794F2"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 4,
+      "maxDataPoints": 240
+    },
+    {
+      "title": "各采集模块状态",
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 12,
+        "h": 3
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_collector_success",
+          "legendFormat": "{{machine}} {{collector}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#5794F2"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 5
+    },
+    {
+      "title": "硬件数据年龄",
+      "type": "stat",
+      "gridPos": {
+        "x": 12,
+        "y": 12,
+        "w": 12,
+        "h": 3
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "time() - lab_collector_last_success_seconds",
+          "legendFormat": "{{machine}} {{collector}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#5794F2"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 6
+    }
+  ],
+  "templating": {
+    "list": []
+  },
+  "links": [
+    {
+      "title": "总览",
+      "type": "link",
+      "url": "/d/pve-home",
+      "icon": "dashboard"
+    },
+    {
+      "title": "CPU",
+      "type": "link",
+      "url": "/d/pve-cpu?var-machine=pve"
+    },
+    {
+      "title": "内存",
+      "type": "link",
+      "url": "/d/pve-memory?var-machine=pve"
+    },
+    {
+      "title": "磁盘",
+      "type": "link",
+      "url": "/d/pve-disk?var-machine=pve"
+    },
+    {
+      "title": "网络",
+      "type": "link",
+      "url": "/d/pve-network?var-machine=pve"
+    },
+    {
+      "title": "GPU",
+      "type": "link",
+      "url": "/d/pve-gpu"
+    },
+    {
+      "title": "传感器",
+      "type": "link",
+      "url": "/d/pve-sensors"
+    }
+  ],
+  "description": "CPU / CCD、内存、主板供电区域、风扇等读数来自宿主机内核或 BMC。不存在或无效的传感器显示为空；当前 BMC 整机功耗返回无效 0 W，已排除。"
+}

@@ -1,0 +1,3481 @@
+{
+  "uid": "pve-home",
+  "title": "PVE · 实时监控大屏",
+  "schemaVersion": 40,
+  "version": 1,
+  "editable": true,
+  "style": "dark",
+  "timezone": "Asia/Shanghai",
+  "refresh": "1s",
+  "timepicker": {
+    "refresh_intervals": [
+      "1s",
+      "5s",
+      "10s",
+      "30s",
+      "1m"
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "tags": [
+    "PVE",
+    "任务管理器"
+  ],
+  "graphTooltip": 1,
+  "panels": [
+    {
+      "title": "",
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:cpu_usage_percent{machine=\"pve\"}",
+          "legendFormat": "PVE CPU",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_cpu_busy_frequency_hertz{machine=\"pve\",cpu=\"\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"cpu\"} < 150)",
+          "legendFormat": "工作频率",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab:memory_used_bytes{machine=\"pve\"}",
+          "legendFormat": "内存已用",
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab:memory_used_percent{machine=\"pve\"}",
+          "legendFormat": "内存占比",
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_cpu_package_power_watts and on(machine) (time() - lab_collector_last_success_seconds{collector=\"cpu\"} < 150)",
+          "legendFormat": "CPU 功耗",
+          "refId": "E",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "sum(lab_gpu_power_watts and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150))",
+          "legendFormat": "GPU 功耗",
+          "refId": "F",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "max(node_hwmon_temp_celsius{machine=\"pve\"} * on(machine,chip,instance,job) group_left(chip_name) node_hwmon_chip_names{machine=\"pve\",chip_name=\"k10temp\"})",
+          "legendFormat": "CPU 温度",
+          "refId": "G",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab:disk_read_bytes_per_second{machine=\"pve\"}",
+          "legendFormat": "磁盘读取",
+          "refId": "H",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab:disk_write_bytes_per_second{machine=\"pve\"}",
+          "legendFormat": "磁盘写入",
+          "refId": "I",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab:network_receive_bytes_per_second{machine=\"pve\"}",
+          "legendFormat": "网络接收",
+          "refId": "J",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab:network_transmit_bytes_per_second{machine=\"pve\"}",
+          "legendFormat": "网络发送",
+          "refId": "K",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#5794F2"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PVE CPU"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "工作频率"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "hertz"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "内存已用"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "内存占比"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU 功耗"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "watt"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FFB357"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "GPU 功耗"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "watt"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#56D4C0"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU 温度"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "磁盘读取"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "Bps"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "磁盘写入"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "Bps"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "网络接收"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "Bps"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "网络发送"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "Bps"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "工作频率"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PVE CPU"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-cpu?var-machine=pve",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "工作频率"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-cpu?var-machine=pve",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "内存已用"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-memory?var-machine=pve",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "内存占比"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-memory?var-machine=pve",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU 功耗"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-cpu?var-machine=pve",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "GPU 功耗"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-gpu?var-machine=pve",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU 温度"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-sensors?var-machine=pve",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "磁盘读取"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-disk?var-machine=pve",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "磁盘写入"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-disk?var-machine=pve",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "网络接收"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-network?var-machine=pve",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "网络发送"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-network?var-machine=pve",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        },
+        "wideLayout": false
+      },
+      "id": 1
+    },
+    {
+      "title": "",
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 2,
+        "w": 12,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_gpu_utilization_percent{gpu=\"0\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "GPU 0 · 使用率",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_gpu_memory_used_bytes{gpu=\"0\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "显存已用",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_gpu_temperature_celsius{gpu=\"0\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "温度",
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_gpu_power_watts{gpu=\"0\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "功耗",
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_gpu_clock_hertz{gpu=\"0\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "核心频率",
+          "refId": "E",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_gpu_fan_percent{gpu=\"0\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "风扇",
+          "refId": "F",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#5794F2"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "links": [
+            {
+              "title": "GPU 详情",
+              "url": "/d/pve-gpu",
+              "targetBlank": false
+            }
+          ]
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "GPU 0 · 使用率"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#56D4C0"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "显存已用"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "温度"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "功耗"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "watt"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FFB357"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "核心频率"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "hertz"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "风扇"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#56D4C0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        },
+        "wideLayout": false
+      },
+      "id": 2
+    },
+    {
+      "title": "GPU 0 · 使用率 / 显存占比",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_gpu_utilization_percent{gpu=\"0\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "GPU",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "100 * lab_gpu_memory_used_bytes{gpu=\"0\"} / lab_gpu_memory_total_bytes{gpu=\"0\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "显存",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "min": 0,
+          "max": 100,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisBorderShow": false,
+            "axisWidth": 70
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pve"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PVE"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ubuntu"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ubuntu"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "windows"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Windows"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fnos"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "飞牛"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "GPU"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#56D4C0"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "显存"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "maxDataPoints": 240,
+      "links": [
+        {
+          "title": "详细信息",
+          "url": "/d/pve-gpu",
+          "targetBlank": false
+        }
+      ],
+      "id": 3
+    },
+    {
+      "title": "GPU 0 · 功耗 / 温度",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 6,
+        "y": 4,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_gpu_power_watts{gpu=\"0\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "功耗",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "lab_gpu_temperature_celsius{gpu=\"0\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "温度",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "watt",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisBorderShow": false,
+            "axisWidth": 70
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pve"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PVE"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ubuntu"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ubuntu"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "windows"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Windows"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fnos"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "飞牛"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "温度"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "功耗"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "maxDataPoints": 240,
+      "links": [
+        {
+          "title": "详细信息",
+          "url": "/d/pve-gpu",
+          "targetBlank": false
+        }
+      ],
+      "id": 4
+    },
+    {
+      "title": "",
+      "type": "stat",
+      "gridPos": {
+        "x": 12,
+        "y": 2,
+        "w": 12,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_gpu_utilization_percent{gpu=\"1\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "GPU 1 · 使用率",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_gpu_memory_used_bytes{gpu=\"1\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "显存已用",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_gpu_temperature_celsius{gpu=\"1\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "温度",
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_gpu_power_watts{gpu=\"1\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "功耗",
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_gpu_clock_hertz{gpu=\"1\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "核心频率",
+          "refId": "E",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_gpu_fan_percent{gpu=\"1\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "风扇",
+          "refId": "F",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#5794F2"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "links": [
+            {
+              "title": "GPU 详情",
+              "url": "/d/pve-gpu",
+              "targetBlank": false
+            }
+          ]
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "GPU 1 · 使用率"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#56D4C0"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "显存已用"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "温度"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "功耗"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "watt"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FFB357"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "核心频率"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "hertz"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "风扇"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#56D4C0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        },
+        "wideLayout": false
+      },
+      "id": 5
+    },
+    {
+      "title": "GPU 1 · 使用率 / 显存占比",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_gpu_utilization_percent{gpu=\"1\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "GPU",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "100 * lab_gpu_memory_used_bytes{gpu=\"1\"} / lab_gpu_memory_total_bytes{gpu=\"1\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "显存",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "min": 0,
+          "max": 100,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisBorderShow": false,
+            "axisWidth": 70
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pve"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PVE"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ubuntu"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ubuntu"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "windows"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Windows"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fnos"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "飞牛"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "GPU"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#56D4C0"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "显存"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "maxDataPoints": 240,
+      "links": [
+        {
+          "title": "详细信息",
+          "url": "/d/pve-gpu",
+          "targetBlank": false
+        }
+      ],
+      "id": 6
+    },
+    {
+      "title": "GPU 1 · 功耗 / 温度",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 18,
+        "y": 4,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_gpu_power_watts{gpu=\"1\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "功耗",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "lab_gpu_temperature_celsius{gpu=\"1\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"gpu\"} < 150)",
+          "legendFormat": "温度",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "watt",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisBorderShow": false,
+            "axisWidth": 70
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pve"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PVE"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ubuntu"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ubuntu"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "windows"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Windows"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fnos"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "飞牛"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "温度"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "功耗"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "maxDataPoints": 240,
+      "links": [
+        {
+          "title": "详细信息",
+          "url": "/d/pve-gpu",
+          "targetBlank": false
+        }
+      ],
+      "id": 7
+    },
+    {
+      "title": "虚拟机 · 内部资源使用（fnos = 飞牛）",
+      "type": "table",
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 24,
+        "h": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "label_replace(lab:cpu_usage_percent{machine=~\"ubuntu|windows|fnos\"},\"item\",\"CPU\",\"machine\",\".*\") or label_replace(lab:memory_used_bytes{machine=~\"ubuntu|windows|fnos\"},\"item\",\"内存已用\",\"machine\",\".*\") or label_replace(lab:memory_used_percent{machine=~\"ubuntu|windows|fnos\"},\"item\",\"内存占比\",\"machine\",\".*\") or label_replace(lab:disk_read_bytes_per_second{machine=~\"ubuntu|windows|fnos\"},\"item\",\"磁盘读\",\"machine\",\".*\") or label_replace(lab:disk_write_bytes_per_second{machine=~\"ubuntu|windows|fnos\"},\"item\",\"磁盘写\",\"machine\",\".*\") or label_replace(lab:network_receive_bytes_per_second{machine=~\"ubuntu|windows|fnos\"},\"item\",\"网络收\",\"machine\",\".*\") or label_replace(lab:network_transmit_bytes_per_second{machine=~\"ubuntu|windows|fnos\"},\"item\",\"网络发\",\"machine\",\".*\")",
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false,
+          "format": "table"
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#5794F2"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "minWidth": 80
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "机器"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-cpu?var-machine=${__data.fields[\"机器\"]}",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "内存已用"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-memory?var-machine=${__data.fields[\"机器\"]}",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "内存占比"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-memory?var-machine=${__data.fields[\"机器\"]}",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "磁盘读"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "Bps"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-disk?var-machine=${__data.fields[\"机器\"]}",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "磁盘写"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "Bps"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-disk?var-machine=${__data.fields[\"机器\"]}",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "网络收"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "Bps"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-network?var-machine=${__data.fields[\"机器\"]}",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "网络发"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "Bps"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "详细信息",
+                    "url": "/d/pve-network?var-machine=${__data.fields[\"机器\"]}",
+                    "targetBlank": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "transformations": [
+        {
+          "id": "groupingToMatrix",
+          "options": {
+            "columnField": "item",
+            "rowField": "machine",
+            "valueField": "Value"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {
+              "machine\\item": 0,
+              "CPU": 1,
+              "内存已用": 2,
+              "内存占比": 3,
+              "磁盘读": 4,
+              "磁盘写": 5,
+              "网络收": 6,
+              "网络发": 7
+            },
+            "renameByName": {
+              "machine\\item": "机器"
+            }
+          }
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        }
+      },
+      "id": 8
+    },
+    {
+      "title": "CPU · 四机趋势",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 13,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:cpu_usage_percent",
+          "legendFormat": "{{machine}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "min": 0,
+          "max": 100,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisBorderShow": false,
+            "axisWidth": 70
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pve"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PVE"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ubuntu"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ubuntu"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "windows"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Windows"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fnos"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "飞牛"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "maxDataPoints": 240,
+      "links": [
+        {
+          "title": "详细信息",
+          "url": "/d/pve-cpu?var-machine=pve",
+          "targetBlank": false
+        }
+      ],
+      "id": 9
+    },
+    {
+      "title": "内存 · 四机占比",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 6,
+        "y": 13,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:memory_used_percent",
+          "legendFormat": "{{machine}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "min": 0,
+          "max": 100,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisBorderShow": false,
+            "axisWidth": 70
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pve"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PVE"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ubuntu"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ubuntu"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "windows"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Windows"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fnos"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "飞牛"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "maxDataPoints": 240,
+      "links": [
+        {
+          "title": "详细信息",
+          "url": "/d/pve-memory?var-machine=pve",
+          "targetBlank": false
+        }
+      ],
+      "id": 10
+    },
+    {
+      "title": "磁盘 · 读写总吞吐",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 12,
+        "y": 13,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:disk_read_bytes_per_second + lab:disk_write_bytes_per_second",
+          "legendFormat": "{{machine}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisBorderShow": false,
+            "axisWidth": 70
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pve"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PVE"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ubuntu"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ubuntu"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "windows"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Windows"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fnos"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "飞牛"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "maxDataPoints": 240,
+      "links": [
+        {
+          "title": "详细信息",
+          "url": "/d/pve-disk?var-machine=pve",
+          "targetBlank": false
+        }
+      ],
+      "id": 11
+    },
+    {
+      "title": "网络 · 收发总吞吐",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 18,
+        "y": 13,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:network_receive_bytes_per_second + lab:network_transmit_bytes_per_second",
+          "legendFormat": "{{machine}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisBorderShow": false,
+            "axisWidth": 70
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pve"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PVE"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ubuntu"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ubuntu"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "windows"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Windows"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fnos"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "飞牛"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "maxDataPoints": 240,
+      "links": [
+        {
+          "title": "详细信息",
+          "url": "/d/pve-network?var-machine=pve",
+          "targetBlank": false
+        }
+      ],
+      "id": 12
+    },
+    {
+      "title": "CPU · 工作频率",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 17,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_cpu_busy_frequency_hertz{machine=\"pve\",cpu=\"\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"cpu\"} < 150)",
+          "legendFormat": "工作频率",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "hertz",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisBorderShow": false,
+            "axisWidth": 70
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pve"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PVE"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ubuntu"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ubuntu"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "windows"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Windows"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fnos"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "飞牛"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "maxDataPoints": 240,
+      "id": 13
+    },
+    {
+      "title": "CPU · 封装功耗",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 6,
+        "y": 17,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_cpu_package_power_watts and on(machine) (time() - lab_collector_last_success_seconds{collector=\"cpu\"} < 150)",
+          "legendFormat": "CPU",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "watt",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisBorderShow": false,
+            "axisWidth": 70
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pve"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PVE"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ubuntu"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ubuntu"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "windows"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Windows"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fnos"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "飞牛"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "maxDataPoints": 240,
+      "id": 14
+    },
+    {
+      "title": "CPU · 最高温度",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 12,
+        "y": 17,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "max(node_hwmon_temp_celsius{machine=\"pve\"} * on(machine,chip,instance,job) group_left(chip_name) node_hwmon_chip_names{machine=\"pve\",chip_name=\"k10temp\"})",
+          "legendFormat": "最高温度",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisBorderShow": false,
+            "axisWidth": 70
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pve"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PVE"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ubuntu"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ubuntu"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "windows"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Windows"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF9830"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fnos"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "飞牛"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "maxDataPoints": 240,
+      "id": 15
+    },
+    {
+      "title": "采集 · 24 小时分钟历史",
+      "type": "stat",
+      "gridPos": {
+        "x": 18,
+        "y": 17,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "sum(up{job=~\"linux|windows\"})",
+          "legendFormat": "在线台数",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_monitor_scrape_interval_seconds",
+          "legendFormat": "实时周期",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "lab_monitor_history_disk_bytes",
+          "legendFormat": "历史占用",
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#5794F2"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "在线台数"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#73BF69"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "实时周期"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#5794F2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "历史占用"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#B877D9"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        },
+        "wideLayout": false
+      },
+      "id": 16
+    }
+  ],
+  "templating": {
+    "list": []
+  },
+  "links": [
+    {
+      "title": "总览",
+      "type": "link",
+      "url": "/d/pve-home",
+      "icon": "dashboard"
+    },
+    {
+      "title": "CPU",
+      "type": "link",
+      "url": "/d/pve-cpu?var-machine=pve"
+    },
+    {
+      "title": "内存",
+      "type": "link",
+      "url": "/d/pve-memory?var-machine=pve"
+    },
+    {
+      "title": "磁盘",
+      "type": "link",
+      "url": "/d/pve-disk?var-machine=pve"
+    },
+    {
+      "title": "网络",
+      "type": "link",
+      "url": "/d/pve-network?var-machine=pve"
+    },
+    {
+      "title": "GPU",
+      "type": "link",
+      "url": "/d/pve-gpu"
+    },
+    {
+      "title": "传感器",
+      "type": "link",
+      "url": "/d/pve-sensors"
+    }
+  ]
+}

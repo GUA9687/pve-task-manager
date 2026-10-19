@@ -1,0 +1,53 @@
+{
+  "groups": [
+    {
+      "name": "task-manager-normalized",
+      "rules": [
+        {
+          "record": "lab:cpu_usage_percent",
+          "expr": "(clamp((100 * (1 - avg by(machine)(irate(node_cpu_seconds_total{mode=\"idle\"}[5m]))) or 100 * (1 - avg by(machine)(irate(windows_cpu_time_total{mode=\"idle\"}[5m])))),0,100)) and on(machine) (up{job=~\"linux|windows\"} == 1)"
+        },
+        {
+          "record": "lab:cpu_core_usage_percent",
+          "expr": "(clamp((100 * (1 - avg by(machine,cpu)(irate(node_cpu_seconds_total{mode=\"idle\"}[5m]))) or label_replace(100 * (1 - avg by(machine,core)(irate(windows_cpu_time_total{mode=\"idle\"}[5m]))), \"cpu\", \"$1\", \"core\", \"(.*)\")),0,100)) and on(machine) (up{job=~\"linux|windows\"} == 1)"
+        },
+        {
+          "record": "lab:cpu_count",
+          "expr": "(count by(machine)(node_cpu_seconds_total{mode=\"idle\"}) or max by(machine)(windows_cpu_logical_processor)) and on(machine) (up{job=~\"linux|windows\"} == 1)"
+        },
+        {
+          "record": "lab:memory_total_bytes",
+          "expr": "(max by(machine)(node_memory_MemTotal_bytes) or max by(machine)(windows_memory_physical_total_bytes)) and on(machine) (up{job=~\"linux|windows\"} == 1)"
+        },
+        {
+          "record": "lab:memory_available_bytes",
+          "expr": "(max by(machine)(node_memory_MemAvailable_bytes) or max by(machine)(windows_memory_available_bytes)) and on(machine) (up{job=~\"linux|windows\"} == 1)"
+        },
+        {
+          "record": "lab:memory_used_bytes",
+          "expr": "(max by(machine)(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) or max by(machine)(windows_memory_physical_total_bytes - windows_memory_available_bytes)) and on(machine) (up{job=~\"linux|windows\"} == 1)"
+        },
+        {
+          "record": "lab:memory_used_percent",
+          "expr": "(100 * (1 - max by(machine)(node_memory_MemAvailable_bytes)/max by(machine)(node_memory_MemTotal_bytes)) or 100 * (1-max by(machine)(windows_memory_available_bytes)/max by(machine)(windows_memory_physical_total_bytes))) and on(machine) (up{job=~\"linux|windows\"} == 1)"
+        },
+        {
+          "record": "lab:disk_read_bytes_per_second",
+          "expr": "(sum by(machine)(irate(node_disk_read_bytes_total{device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[5m])) or sum by(machine)(irate(windows_physical_disk_read_bytes_total[5m]))) and on(machine) (up{job=~\"linux|windows\"} == 1)"
+        },
+        {
+          "record": "lab:disk_write_bytes_per_second",
+          "expr": "(sum by(machine)(irate(node_disk_written_bytes_total{device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[5m])) or sum by(machine)(irate(windows_physical_disk_write_bytes_total[5m]))) and on(machine) (up{job=~\"linux|windows\"} == 1)"
+        },
+        {
+          "record": "lab:network_receive_bytes_per_second",
+          "expr": "(sum by(machine)(irate(node_network_receive_bytes_total{device=~\"eth[0-9]+|enp.*|ens.*|eno.*\"}[5m])) or sum by(machine)(irate(windows_net_bytes_received_total[5m]))) and on(machine) (up{job=~\"linux|windows\"} == 1)"
+        },
+        {
+          "record": "lab:network_transmit_bytes_per_second",
+          "expr": "(sum by(machine)(irate(node_network_transmit_bytes_total{device=~\"eth[0-9]+|enp.*|ens.*|eno.*\"}[5m])) or sum by(machine)(irate(windows_net_bytes_sent_total[5m]))) and on(machine) (up{job=~\"linux|windows\"} == 1)"
+        }
+      ]
+    }
+  ]
+}

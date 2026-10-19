@@ -1,0 +1,712 @@
+{
+  "uid": "pve-memory",
+  "title": "内存 · 真实使用与容量",
+  "schemaVersion": 40,
+  "version": 1,
+  "editable": true,
+  "style": "dark",
+  "timezone": "Asia/Shanghai",
+  "refresh": "1s",
+  "timepicker": {
+    "refresh_intervals": [
+      "1s",
+      "5s",
+      "10s",
+      "30s",
+      "1m"
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "tags": [
+    "PVE",
+    "任务管理器"
+  ],
+  "graphTooltip": 1,
+  "panels": [
+    {
+      "title": "已使用",
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 4,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:memory_used_bytes{machine=\"$machine\"}",
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#B877D9"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 1
+    },
+    {
+      "title": "可用",
+      "type": "stat",
+      "gridPos": {
+        "x": 4,
+        "y": 0,
+        "w": 4,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:memory_available_bytes{machine=\"$machine\"}",
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#B877D9"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 2
+    },
+    {
+      "title": "系统可见总量",
+      "type": "stat",
+      "gridPos": {
+        "x": 8,
+        "y": 0,
+        "w": 4,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:memory_total_bytes{machine=\"$machine\"}",
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#B877D9"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 3
+    },
+    {
+      "title": "使用率",
+      "type": "stat",
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 4,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:memory_used_percent{machine=\"$machine\"}",
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#B877D9"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "min": 0,
+          "max": 100
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 4
+    },
+    {
+      "title": "已用 / 可用",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 2,
+        "w": 12,
+        "h": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:memory_used_bytes{machine=\"$machine\"}",
+          "legendFormat": "已用",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "lab:memory_available_bytes{machine=\"$machine\"}",
+          "legendFormat": "可用",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#B877D9"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 5,
+      "maxDataPoints": 240
+    },
+    {
+      "title": "PVE 配置容量",
+      "type": "stat",
+      "gridPos": {
+        "x": 16,
+        "y": 0,
+        "w": 4,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_vm_configured_memory_bytes{guest=\"$machine\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"inventory\"} < 150)",
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "仅虚拟机适用。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#5794F2"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 6
+    },
+    {
+      "title": "PVE 宿主机侧占用",
+      "type": "stat",
+      "gridPos": {
+        "x": 20,
+        "y": 0,
+        "w": 4,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab_vm_host_memory_bytes{guest=\"$machine\"} and on(machine) (time() - lab_collector_last_success_seconds{collector=\"inventory\"} < 150)",
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "QEMU 在宿主机侧的占用，与客体内部用量不同。",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#5794F2"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 7
+    },
+    {
+      "title": "缓存 / 共享内存 / Swap",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 12,
+        "y": 2,
+        "w": 12,
+        "h": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "node_memory_Cached_bytes{machine=\"$machine\"} or windows_memory_cache_bytes{machine=\"$machine\"}",
+          "legendFormat": "缓存",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "node_memory_Shmem_bytes{machine=\"$machine\"}",
+          "legendFormat": "共享内存",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "node_memory_SwapTotal_bytes{machine=\"$machine\"} - node_memory_SwapFree_bytes{machine=\"$machine\"}",
+          "legendFormat": "Swap 已用",
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "windows_memory_committed_bytes{machine=\"$machine\"}",
+          "legendFormat": "Windows 已提交",
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#B877D9"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 8,
+      "maxDataPoints": 240
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "machine",
+        "label": "机器",
+        "type": "custom",
+        "query": "PVE 宿主机 : pve,Ubuntu : ubuntu,Windows : windows,飞牛 : fnos",
+        "current": {
+          "text": "PVE 宿主机",
+          "value": "pve"
+        },
+        "options": [
+          {
+            "text": "PVE 宿主机",
+            "value": "pve",
+            "selected": true
+          },
+          {
+            "text": "Ubuntu",
+            "value": "ubuntu",
+            "selected": false
+          },
+          {
+            "text": "Windows",
+            "value": "windows",
+            "selected": false
+          },
+          {
+            "text": "飞牛",
+            "value": "fnos",
+            "selected": false
+          }
+        ],
+        "hide": 0
+      }
+    ]
+  },
+  "links": [
+    {
+      "title": "总览",
+      "type": "link",
+      "url": "/d/pve-home",
+      "icon": "dashboard"
+    },
+    {
+      "title": "CPU",
+      "type": "link",
+      "url": "/d/pve-cpu?var-machine=${machine}"
+    },
+    {
+      "title": "内存",
+      "type": "link",
+      "url": "/d/pve-memory?var-machine=${machine}"
+    },
+    {
+      "title": "磁盘",
+      "type": "link",
+      "url": "/d/pve-disk?var-machine=${machine}"
+    },
+    {
+      "title": "网络",
+      "type": "link",
+      "url": "/d/pve-network?var-machine=${machine}"
+    },
+    {
+      "title": "GPU",
+      "type": "link",
+      "url": "/d/pve-gpu"
+    },
+    {
+      "title": "传感器",
+      "type": "link",
+      "url": "/d/pve-sensors"
+    }
+  ],
+  "description": "主读数采用系统内部「总量 − 可用量」。Linux 缓存与共享内存字段可能重叠，不能相加。下方同时保留 PVE 配置容量和宿主机占用，便于区分不同口径。"
+}

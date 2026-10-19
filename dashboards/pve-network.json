@@ -1,0 +1,598 @@
+{
+  "uid": "pve-network",
+  "title": "网络 · 接口流量",
+  "schemaVersion": 40,
+  "version": 1,
+  "editable": true,
+  "style": "dark",
+  "timezone": "Asia/Shanghai",
+  "refresh": "1s",
+  "timepicker": {
+    "refresh_intervals": [
+      "1s",
+      "5s",
+      "10s",
+      "30s",
+      "1m"
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "tags": [
+    "PVE",
+    "任务管理器"
+  ],
+  "graphTooltip": 1,
+  "panels": [
+    {
+      "title": "总接收",
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:network_receive_bytes_per_second{machine=\"$machine\"}",
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#FF9830"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 1
+    },
+    {
+      "title": "总发送",
+      "type": "stat",
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 2
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "lab:network_transmit_bytes_per_second{machine=\"$machine\"}",
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#FF9830"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 2
+    },
+    {
+      "title": "每个接口接收",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 2,
+        "w": 12,
+        "h": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "irate(node_network_receive_bytes_total{machine=\"$machine\",device!=\"lo\"}[5m])",
+          "legendFormat": "{{device}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "irate(windows_net_bytes_received_total{machine=\"$machine\"}[5m])",
+          "legendFormat": "{{nic}}",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#FF9830"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 3,
+      "maxDataPoints": 240
+    },
+    {
+      "title": "每个接口发送",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 12,
+        "y": 2,
+        "w": 12,
+        "h": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "irate(node_network_transmit_bytes_total{machine=\"$machine\",device!=\"lo\"}[5m])",
+          "legendFormat": "{{device}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "irate(windows_net_bytes_sent_total{machine=\"$machine\"}[5m])",
+          "legendFormat": "{{nic}}",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#FF9830"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 4,
+      "maxDataPoints": 240
+    },
+    {
+      "title": "链路速率",
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 12,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "node_network_speed_bytes{machine=\"$machine\",device=~\"eth.*|enp.*|ens.*|eno.*\"} > 0",
+          "legendFormat": "{{device}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        },
+        {
+          "expr": "windows_net_current_bandwidth_bytes{machine=\"$machine\"}",
+          "legendFormat": "{{nic}}",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": true,
+          "range": false
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#FF9830"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "text": {
+          "titleSize": 12,
+          "valueSize": 20
+        }
+      },
+      "id": 5
+    },
+    {
+      "title": "接收错误 / 丢包",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 12,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "pve-prom"
+      },
+      "targets": [
+        {
+          "expr": "irate(node_network_receive_errs_total{machine=\"$machine\"}[5m])",
+          "legendFormat": "{{device}} 错误",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "irate(node_network_receive_drop_total{machine=\"$machine\"}[5m])",
+          "legendFormat": "{{device}} 丢包",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "irate(windows_net_packets_received_errors_total{machine=\"$machine\"}[5m])",
+          "legendFormat": "{{nic}} 错误",
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        },
+        {
+          "expr": "irate(windows_net_packets_received_discarded_total{machine=\"$machine\"}[5m])",
+          "legendFormat": "{{nic}} 丢包",
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "pve-prom"
+          },
+          "instant": false,
+          "range": true
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "pps",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#FF9830"
+          },
+          "decimals": 1,
+          "noValue": "—",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "axisLabel": "",
+            "axisPlacement": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "showLegend": true,
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "id": 6,
+      "maxDataPoints": 240
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "machine",
+        "label": "机器",
+        "type": "custom",
+        "query": "PVE 宿主机 : pve,Ubuntu : ubuntu,Windows : windows,飞牛 : fnos",
+        "current": {
+          "text": "PVE 宿主机",
+          "value": "pve"
+        },
+        "options": [
+          {
+            "text": "PVE 宿主机",
+            "value": "pve",
+            "selected": true
+          },
+          {
+            "text": "Ubuntu",
+            "value": "ubuntu",
+            "selected": false
+          },
+          {
+            "text": "Windows",
+            "value": "windows",
+            "selected": false
+          },
+          {
+            "text": "飞牛",
+            "value": "fnos",
+            "selected": false
+          }
+        ],
+        "hide": 0
+      }
+    ]
+  },
+  "links": [
+    {
+      "title": "总览",
+      "type": "link",
+      "url": "/d/pve-home",
+      "icon": "dashboard"
+    },
+    {
+      "title": "CPU",
+      "type": "link",
+      "url": "/d/pve-cpu?var-machine=${machine}"
+    },
+    {
+      "title": "内存",
+      "type": "link",
+      "url": "/d/pve-memory?var-machine=${machine}"
+    },
+    {
+      "title": "磁盘",
+      "type": "link",
+      "url": "/d/pve-disk?var-machine=${machine}"
+    },
+    {
+      "title": "网络",
+      "type": "link",
+      "url": "/d/pve-network?var-machine=${machine}"
+    },
+    {
+      "title": "GPU",
+      "type": "link",
+      "url": "/d/pve-gpu"
+    },
+    {
+      "title": "传感器",
+      "type": "link",
+      "url": "/d/pve-sensors"
+    }
+  ],
+  "description": "总览仅汇总 Linux 物理 / 客体主网卡，不把网桥与 tap 流量再次相加。虚拟网卡的标称 10 Gbps 不代表物理线路速度；PVE 物理端口的链路速率才代表连接能力。"
+}
