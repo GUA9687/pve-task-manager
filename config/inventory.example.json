@@ -1,0 +1,14 @@
+{
+  "monitor_host": "monitor.example.invalid",
+  "machines": {
+    "pve": "pve.example.invalid",
+    "ubuntu": "ubuntu.example.invalid",
+    "windows": "windows.example.invalid",
+    "fnos": "fnos.example.invalid"
+  },
+  "vm_map": {
+    "101": "ubuntu",
+    "102": "windows",
+    "103": "fnos"
+  }
+}
